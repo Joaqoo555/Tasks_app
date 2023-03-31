@@ -3,7 +3,7 @@ const router = Router()
 
 
 router.get("/", async (req, res)=> {
-    res.json("Hola q onda")
+    res.json("Obtener Tareas")
 })
 
 router.post("/", async (req, res)=> {
