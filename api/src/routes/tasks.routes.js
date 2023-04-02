@@ -1,14 +1,13 @@
 const { Router } = require("express");
+const {POST_create_tasks, GET_tasks} = require("../controllers/tasks.controller.js")
 const router = Router()
 
 
-router.get("/", async (req, res)=> {
-    res.json("Obtener Tareas")
-})
+router.get("/", GET_tasks)
 
-router.post("/", async (req, res)=> {
-    res.json("Create Task")
-})
+
+router.post("/", POST_create_tasks)
+
 
 router.put("/", async (req, res)=> {
     res.json("Actualize Task")

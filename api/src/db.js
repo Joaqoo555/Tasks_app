@@ -1,15 +1,14 @@
 const mongoose = require("mongoose")
 
-
+const url = "mongodb://127.0.0.1:27017/tasks_app";
 const conection = async () => {
     try {
-        const url = "mongodb+srv://joaquindeveloper:Joaquin.2001@clusterjoaqo.gujbi6o.mongodb.net/?retryWrites=true&w=majority";
-        await mongoose.connect(url)
-        console.info("Connect to the Database")
+        const data = await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+        console.log("Connect to the Database")
     } catch (error) {
-        console.info("Error to connect at the Database")
         console.error(error)
     }
 }
 
-module.exports = conection
+
+module.exports = conection;
