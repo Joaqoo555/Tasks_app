@@ -1,21 +1,26 @@
 const { Router } = require("express");
-const {POST_create_tasks, GET_tasks} = require("../controllers/tasks.controller.js")
-const router = Router()
+const {
+  POST_create_tasks,
+  GET_tasks,
+  PUT_tasks,
+  DELETE_tasks,
+  GET_oneTask,
+  DELETE_oneTask
+} = require("../controllers/tasks.controller.js");
+const router = Router();
+
+router.get("/:idTask", GET_oneTask);
+router.get("/", GET_tasks);
 
 
-router.get("/", GET_tasks)
+router.post("/", POST_create_tasks);
 
 
-router.post("/", POST_create_tasks)
+router.put("/:idTask", PUT_tasks);
 
 
-router.put("/", async (req, res)=> {
-    res.json("Actualize Task")
-})
-
-router.delete("/", async (req, res)=> {
-    res.json("Delete Task")
-})
+router.delete("/", DELETE_tasks);
+router.delete("/:idTask", DELETE_oneTask);
 
 
-module.exports = router
+module.exports = router;
