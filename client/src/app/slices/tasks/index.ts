@@ -1,23 +1,25 @@
+import { RootState } from './../../store';
 import { createSlice } from "@reduxjs/toolkit";
-import { TasksState } from "../../../interfaces/tasks.interfaces";
-//import { GET_Tasks } from "./actions";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { Task, TasksState } from "../../../interfaces/tasks.interfaces";
 
 
-
+// Define the initial state using that type
 const initialState: TasksState = {
-  allTasks: null,
-  task: null
-}
+  allTasks: [],
+  task: null,
+};
 
-
-const tasksSlice = createSlice({
+export const tasksSlice = createSlice({
   name: "tasks",
+  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {
-    GET_Tasks: (_state, {type, payload}) => {
-        
-    }
-  },
+  reducers: {},
 });
+
+export const {} = tasksSlice.actions;
+
+// Other code such as selectors can use the imported `RootState` type
+export const selectCount = (state: RootState) => state;
 
 export default tasksSlice.reducer;
