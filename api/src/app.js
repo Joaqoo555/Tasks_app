@@ -1,6 +1,9 @@
 const express = require("express")
 const cors = require('cors');
 const morgan = require('morgan');
+
+
+//Routes of API
 const routes = require('./routes/index.js');
 
 
@@ -22,6 +25,7 @@ APP.use((req, res, next) => {
 
 
 APP.use('/', routes);
+
 
 module.exports = {
   APP
