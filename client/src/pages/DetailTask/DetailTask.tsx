@@ -1,7 +1,9 @@
 import React from "react";
 
 const DetailTask = () => {
-  return <div>DetailTask</div>;
+  return <div>
+aaaa
+  </div>;
 };
 
 export default DetailTask;

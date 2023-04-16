@@ -1,4 +1,6 @@
-import { useGetAllTasksQuery } from "../../apis/tasksApi"
+import { Container } from "@mui/material";
+import { useAddTaskMutation } from "../../apis/tasksApi"
+import CreateCard from "../../components/CreateCard/CreateCard";
 
 
 
@@ -6,9 +8,12 @@ const FormTask = () => {
 
 
   return (
-    <div>
-        Formulario
-    </div>
+    <Container sx={{
+      mt: 2
+      
+    }}>
+      <CreateCard></CreateCard>          
+    </Container>
   )
 }
 

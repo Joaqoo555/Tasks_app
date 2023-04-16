@@ -7,10 +7,11 @@ import {
   Container,
   Box,
   IconButton,
+  Grid,
 } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { Link } from "react-router-dom";
 import { Theme, useTheme } from "@emotion/react";
@@ -21,7 +22,6 @@ interface INT_NavBar {
 
 const NavBar = ({ onChangeTheme }: INT_NavBar) => {
   const theme = useTheme();
-  console.log(theme.palette.mode);
   return (
     <div>
       <Box
@@ -48,15 +48,20 @@ const NavBar = ({ onChangeTheme }: INT_NavBar) => {
                 </Link>
               </Typography>
               <Link to="/tasks/create/" style={{ textDecoration: "none" }}>
-                <Button color="primary" variant="contained" sx={{
-                  flex: ""
-                }}>
-                Create Task
-                <AddCircleIcon sx={{
-                  ml: 2,
-                  textAlign: "center"
-
-                }}></AddCircleIcon>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  sx={{
+                    flex: "",
+                  }}
+                >
+                  Create Task
+                  <AddCircleIcon
+                    sx={{
+                      ml: 2,
+                      textAlign: "center",
+                    }}
+                  ></AddCircleIcon>
                 </Button>
               </Link>
               <IconButton
@@ -76,7 +81,9 @@ const NavBar = ({ onChangeTheme }: INT_NavBar) => {
         <Container maxWidth="lg"></Container>
       </Box>
       <Container maxWidth="xl">
-        <Outlet />
+        <Grid container>
+          <Outlet />
+        </Grid>
       </Container>
     </div>
   );

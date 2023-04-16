@@ -7,13 +7,12 @@ import CardTask from "../components/CardTask/CardTask";
 const Home = () => {
   const { data } = useGetAllTasksQuery();
   return (
-    <div>
+    < >
       {" "}
       {data?.map((task) => (
           <CardTask info={task}/>
       ))}
-      {/* <MovebleDiv/> */}
-    </div>
+    </>
   );
 };
 
