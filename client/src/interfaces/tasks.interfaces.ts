@@ -1,9 +1,10 @@
 
 export interface Task  {
+    taskId?: string;
     title: string;
     description: string;
     status: string;
-    userId: string | null;
+    userId?: string;
 }
 
 export interface TasksState {
