@@ -47,7 +47,7 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("dark");
 
   const changeTheme = () => {
     setThemeMode(themeMode === "light" ? "dark" : "light");

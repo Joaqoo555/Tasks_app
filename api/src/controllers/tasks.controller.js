@@ -38,7 +38,9 @@ const getAllTasks = async (req, res) => {
   try {
     //Find all tasks.
     const findAllTasks = await Tasks.find({});
-    return res.status(successCode).send(HandleSuccessResponse("tasks found", findAllTasks));
+    return res
+      .status(successCode)
+      .send(HandleSuccessResponse("tasks found", findAllTasks));
   } catch (error) {
     res.status(notFoundCode).json(HanldeErrorResponse(error.message, error));
   }
@@ -50,11 +52,17 @@ const getTask = async (req, res) => {
     //Get one Task for idTask, if not found return message
     const findOnetask = await Tasks.findById(idTask);
     if (!findOnetask) {
-      return res.status(notFoundCode).json(HandleSuccessResponse("task Not found", findOnetask));
+      return res
+        .status(notFoundCode)
+        .json(HandleSuccessResponse("task Not found", findOnetask));
     }
-    return res.status(successCode).json(HandleSuccessResponse("Task Found", findOnetask));
+    return res
+      .status(successCode)
+      .json(HandleSuccessResponse("Task Found", findOnetask));
   } catch (error) {
-    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
+    res
+      .status(internalErrorCode)
+      .json(HanldeErrorResponse(error.message, error));
   }
 };
 
@@ -67,7 +75,9 @@ const putTask = async (req, res) => {
       new: true,
     });
 
-    res.status(successCode).json(HandleSuccessResponse("Task actualizated", updateTask));
+    res
+      .status(successCode)
+      .json(HandleSuccessResponse("Task actualizated", updateTask));
   } catch (error) {
     res.status(errorCode).json(HanldeErrorResponse(error.message, error));
   }
@@ -78,9 +88,10 @@ const deleteAllTasks = async (req, res) => {
     const deleted = await Tasks.deleteMany({});
     if (deleted.deletedCount === 0) throw new Error("not found tasks");
     return res.send(HandleSuccessResponse("Tasks deleted successfully"));
-
   } catch (error) {
-    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
+    res
+      .status(internalErrorCode)
+      .json(HanldeErrorResponse(error.message, error));
   }
 };
 const deleteTask = async (req, res) => {
@@ -88,10 +99,13 @@ const deleteTask = async (req, res) => {
     const { idTask } = req.params;
     const deletedTask = await Tasks.findByIdAndDelete(idTask);
     if (!deletedTask) throw new Error("The task not exits");
-    return res.status(successCode).json(HandleSuccessResponse(`Delete task is resolved`));
-    
+    return res
+      .status(successCode)
+      .json(HandleSuccessResponse(`Delete task is resolved`));
   } catch (error) {
-    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
+    res
+      .status(internalErrorCode)
+      .json(HanldeErrorResponse(error.message, error));
   }
 };
 module.exports = {

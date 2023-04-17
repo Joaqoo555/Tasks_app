@@ -55,10 +55,10 @@ const NavBar = ({ onChangeTheme }: INT_NavBar) => {
                     flex: "",
                   }}
                 >
-                  Create ITask
+                  Añadir tarea
                   <AddCircleIcon
                     sx={{
-                      ml: 2,
+                      ml: 1,
                       textAlign: "center",
                     }}
                   ></AddCircleIcon>

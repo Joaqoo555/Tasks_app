@@ -1,6 +1,6 @@
 
 export interface ITask  {
-    taskId: string | undefined;
+    _id: string | undefined;
     title: string;
     description: string;
     status: string;

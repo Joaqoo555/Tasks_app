@@ -10,10 +10,10 @@ const HandleSuccessResponse = (message = "Se realizo con exito", info = undefine
         info
     }
 }
-const HanldeErrorResponse = (errorMesssage, error)=> {
+const HanldeErrorResponse = (errorMessage, error)=> {
     return {
         status: "Error",
-        errorMesssage,
+        errorMessage,
         error
     }
 };

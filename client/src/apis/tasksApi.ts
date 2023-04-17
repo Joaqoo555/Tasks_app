@@ -9,8 +9,12 @@ export const tasksApi = createApi({
   reducerPath: 'tasksApi',
   //fetch
   baseQuery: fetchBaseQuery({baseUrl}),
-  
+  // refetchOnMountOrArgChange: true,
+  // refetchOnFocus: true,
 
+
+
+  tagTypes: ['Posts', 'Deletes', 'Updates'],
   //endpoints for the baseUrl
   endpoints: (builder) => ({
     //Obtener todas las tasks existentes
@@ -20,7 +24,8 @@ export const tasksApi = createApi({
         const {data} = errorResponse;
         const dataErrors = data as IStatusTaskError;
         return dataErrors
-      } 
+      } ,
+      providesTags: ["Deletes", "Updates", "Posts"]
       
     }),
     //Obtener tasks por ID
@@ -40,6 +45,7 @@ export const tasksApi = createApi({
         body: newTask,
 
       }),
+      invalidatesTags: ["Posts"],
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
         const dataErrors = data as IStatusTaskError;
@@ -48,11 +54,13 @@ export const tasksApi = createApi({
     }),
     
     //Primer parametro es lo que recibo de la respuesta del post, el segundo parametro es la interface que se le va a proporcionar al deleteTask
-    deleteTask: builder.mutation<IStatusTask, string>({
+    deleteTask: builder.mutation<IStatusTask, string | undefined>({
       query: (idTask: string) => ({
         url: `tasks/${idTask}`,
         method: "delete"
       }),
+      invalidatesTags: ["Deletes"],
+
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
         const dataErrors = data as IStatusTaskError;
@@ -62,10 +70,12 @@ export const tasksApi = createApi({
     //El primer parametro combierte toda la interface ITask a posiblemente puedan llegar algunos de esos argumentos, pero q es necesario q traiga el task ID, el segundo parametro indica que va a devolver el task upgraded
     updateTask: builder.mutation<IStatusTask, ITask>({
       query: (taskUpdate: ITask) => ({
-        url: `task/${taskUpdate.taskId}`,
+        url: `task/${taskUpdate._id}`,
         method: "put",
         body: taskUpdate,
       }),
+      invalidatesTags: ["Updates"],
+
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
         const dataErrors = data as IStatusTaskError;
