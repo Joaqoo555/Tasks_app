@@ -1,42 +1,64 @@
 const Tasks = require("../schemas/tasks.shema");
+const statusResponses = require("../utils/status.js");
+const {
+  errorCode,
+  successCode,
+  createCode,
+  notFoundCode,
+  internalErrorCode,
+  HandleSuccessResponse,
+  HanldeErrorResponse,
+} = statusResponses;
 
-const POST_create_tasks = async (req, res) => {
+const createTask = async (req, res) => {
   try {
     const { title, description, status } = req.body;
-    if(!title || !description) throw new Error("Not available if not passage the content")
+    if (
+      !title ||
+      typeof title !== "string" ||
+      !description ||
+      typeof description !== "string"
+    )
+      throw new Error("Title and description are required and must be strings");
+
+    //Create new Task
     const newTask = await Tasks.create({
       title,
       description,
-      status
+      status,
     });
-
-    res.status(201).send(newTask);
+    const message = "The Task was successfully created";
+    res.status(createCode).send(HandleSuccessResponse(message, newTask));
   } catch (error) {
-    res.status(400).json({ message: error.message, error });
+    res.status(errorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
 
-const GET_tasks = async (req, res) => {
+const getAllTasks = async (req, res) => {
   try {
+    //Find all tasks.
     const findAllTasks = await Tasks.find({});
-    //if(findAllTasks.length === 0) return res.status(200).json({message: "Not Tasks"})
-    return res.status(200).json(findAllTasks);
+    return res.status(successCode).send(HandleSuccessResponse("tasks found", findAllTasks));
   } catch (error) {
-    res.status(404).json({ message: error.message, error });
+    res.status(notFoundCode).json(HanldeErrorResponse(error.message, error));
   }
 };
-const GET_oneTask = async (req, res) => {
+
+const getTask = async (req, res) => {
   try {
     const { idTask } = req.params;
-
+    //Get one Task for idTask, if not found return message
     const findOnetask = await Tasks.findById(idTask);
-    return res.status(200).json(findOnetask);
+    if (!findOnetask) {
+      return res.status(notFoundCode).json(HandleSuccessResponse("task Not found", findOnetask));
+    }
+    return res.status(successCode).json(HandleSuccessResponse("Task Found", findOnetask));
   } catch (error) {
-    res.status(404).json({ message: error.message, error });
+    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
 
-const PUT_tasks = async (req, res) => {
+const putTask = async (req, res) => {
   const { idTask } = req.params;
   try {
     const newData = req.body;
@@ -45,38 +67,38 @@ const PUT_tasks = async (req, res) => {
       new: true,
     });
 
-    res.status(200).json(updateTask);
+    res.status(successCode).json(HandleSuccessResponse("Task actualizated", updateTask));
   } catch (error) {
-    res.status(400).json({ message: error.message, error });
+    res.status(errorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
 
-const DELETE_tasks = async (req, res) => {
+const deleteAllTasks = async (req, res) => {
   try {
     const deleted = await Tasks.deleteMany({});
-    if (deleted.deletedCount === 0) throw new Error("The tasks is not exits")
-    return res.send("Documents deleted successfully");
+    if (deleted.deletedCount === 0) throw new Error("not found tasks");
+    return res.send(HandleSuccessResponse("Tasks deleted successfully"));
+
   } catch (error) {
-    res.status(500).json({ message: error.message, error });
+    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
-const DELETE_oneTask = async (req, res) => {
+const deleteTask = async (req, res) => {
   try {
     const { idTask } = req.params;
     const deletedTask = await Tasks.findByIdAndDelete(idTask);
-    if(!deletedTask) throw new Error("The task is not exits")
-    return res
-      .status(404)
-      .json({ message: `Delete task is resolved` });
+    if (!deletedTask) throw new Error("The task not exits");
+    return res.status(successCode).json(HandleSuccessResponse(`Delete task is resolved`));
+    
   } catch (error) {
-    res.status(500).json({ message: error.message, error });
+    res.status(internalErrorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
 module.exports = {
-  POST_create_tasks,
-  GET_tasks,
-  GET_oneTask,
-  DELETE_tasks,
-  DELETE_oneTask,
-  PUT_tasks,
+  createTask,
+  getAllTasks,
+  getTask,
+  deleteAllTasks,
+  deleteTask,
+  putTask,
 };

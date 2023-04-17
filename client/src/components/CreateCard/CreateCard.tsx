@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { FormEvent, useState } from "react";
 import { useAddTaskMutation } from "../../apis/tasksApi";
-import { Task } from "../../interfaces/tasks.interfaces";
+import { IStatusTaskError, ITask } from "../../interfaces/tasks.interfaces";
 import { ChangeEvent } from "react";
 
 const CreateCard = () => {
@@ -22,9 +22,20 @@ const CreateCard = () => {
     isError,
     isLoading,
     isSuccess,
+    data,
+    error
   }] = useAddTaskMutation();
-
-  const initialtask: Task = {
+  //data.message
+  const errorHandler = error as IStatusTaskError
+  if(isError) {
+  console.log(errorHandler.errorMessage);
+  console.log(errorHandler.status);
+  console.log(errorHandler.error);
+  
+  }
+  
+  const initialtask: ITask = {
+    taskId: undefined,
     description: "",
     title: "",
     status: "to do",
@@ -34,7 +45,6 @@ const CreateCard = () => {
   const [task, setTask] = useState(initialtask);
 
   const handleChangeStatus = (event: React.SyntheticEvent, status: string) => {
-    console.log(status);
     setTask((initial) => ({
       ...initial,
       status,
@@ -51,6 +61,7 @@ const CreateCard = () => {
   const onSubmitForm = (e: FormEvent) => {
     e.preventDefault();
     createtask(task)
+
   };
   return (
     <Grid container alignItems="center" justifyContent="center">
