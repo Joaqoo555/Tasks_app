@@ -47,7 +47,7 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("dark");
 
   const changeTheme = () => {
     setThemeMode(themeMode === "light" ? "dark" : "light");
@@ -61,7 +61,7 @@ function App() {
             <Route index element={<Home />}></Route>
             <Route path="/tasks/create" element={<FormTask />}></Route>
             <Route
-              path="/tasks/details/:taskId"
+              path="/tasks/details/:_id"
               element={<DetailTask />}
             ></Route>
           </Route>

@@ -1,10 +1,10 @@
 import { RootState } from './../../store';
 import { createSlice } from "@reduxjs/toolkit";
-import { TasksState } from "../../../interfaces/tasks.interfaces";
+import { ITasksState } from "../../../interfaces/tasks.interfaces";
 
 
 // Define the initial state using that type
-const initialState: TasksState = {
+const initialState: ITasksState = {
   allTasks: [],
   task: null,
 };

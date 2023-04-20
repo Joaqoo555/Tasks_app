@@ -11,36 +11,38 @@ import {
   Tab,
   Tabs,
   Box,
+  FormControl,
 } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useAddTaskMutation } from "../../apis/tasksApi";
-import { Task } from "../../interfaces/tasks.interfaces";
+import { IStatusTaskError, ITask } from "../../interfaces/tasks.interfaces";
 import { ChangeEvent } from "react";
+import { toast, Toaster } from "react-hot-toast";
+import { configToast } from "../../utils/toast.utils";
 
 const CreateCard = () => {
-  const [createtask, {
-    isError,
-    isLoading,
-    isSuccess,
-  }] = useAddTaskMutation();
-
-  const initialtask: Task = {
+  const [createTask, { isError, isLoading, isSuccess, data }] =
+    useAddTaskMutation();
+  //le cambio el tipado a la vatiable error, para poder manejar la logica cuando devuelve un error el sevidor
+  // const errorTask = error as IStatusTaskError;
+  
+  const initialTask: ITask = {
+    _id: undefined,
     description: "",
     title: "",
     status: "to do",
     userId: "",
   };
-
-  const [task, setTask] = useState(initialtask);
+  const [task, setTask] = useState(initialTask);
 
   const handleChangeStatus = (event: React.SyntheticEvent, status: string) => {
-    console.log(status);
     setTask((initial) => ({
       ...initial,
       status,
     }));
   };
   const handleChangeInputs = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    //Escucha cada vez que los inputs cambian y va haciendo el set al estado local.
     const nameInput = target.name;
     const valueInput = target.value;
     setTask((initial) => ({
@@ -48,9 +50,30 @@ const CreateCard = () => {
       [nameInput]: valueInput,
     }));
   };
-  const onSubmitForm = (e: FormEvent) => {
-    e.preventDefault();
-    createtask(task)
+  const onSubmitForm =  (event: FormEvent) => {
+    event.preventDefault();
+
+ //Se crea una alerta con la promesa del create Task
+    toast.promise(
+      //,unwrap() convierte la función a una promesa
+      createTask(task).unwrap(),
+      {
+        loading: 'Loading',
+        success: (data) => `${data.message}`,
+        error: (error) => `${error.errorMessage}`,
+      },//Configuracion de la alerta
+      configToast
+    ).then(() => {
+      //Seteo el estado al inicial una vez creada la task
+      setTask({
+        _id: undefined,
+        description: "",
+        title: "",
+        status: "to do",
+        userId: "",
+      });
+    })
+
   };
   return (
     <Grid container alignItems="center" justifyContent="center">
@@ -65,16 +88,18 @@ const CreateCard = () => {
             >
               {/* Title */}
               <TextField
+                error={isError ? true : false}
                 id="standard-basic"
-                label="Title"
+                label={"Titulo de Tarea"}
                 variant="standard"
                 name="title"
                 onChange={handleChangeInputs}
+                value={task.title}
               />
 
               {/* Status */}
               <Box sx={{ width: "100%", mt: 4 }}>
-                <Typography variant="body1" color="initial">
+                <Typography variant="body1">
                   Seleccionar estado de la tarea
                 </Typography>
                 <Tabs
@@ -84,7 +109,7 @@ const CreateCard = () => {
                   indicatorColor="primary"
                 >
                   <Tab value="to do" label="Por hacer" />
-                  <Tab value="in progress" label="en progreso" />
+                  <Tab value="in progress" label="En progreso" />
                   <Tab value="done" label="Hecha" />
                 </Tabs>
               </Box>
@@ -92,7 +117,7 @@ const CreateCard = () => {
               {/* Descriptions */}
               <TextField
                 id="standard-multiline-static"
-                label="Description"
+                label="Descripcion"
                 multiline
                 name="description"
                 rows={20}
@@ -101,6 +126,7 @@ const CreateCard = () => {
                   mt: 2,
                 }}
                 onChange={handleChangeInputs}
+                value={task.description}
               />
             </CardContent>
 
@@ -115,6 +141,7 @@ const CreateCard = () => {
               <Button type="submit" variant="contained">
                 Crear Tarea
               </Button>
+              <Toaster />
             </CardActions>
           </Card>
         </form>

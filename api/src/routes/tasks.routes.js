@@ -1,26 +1,26 @@
 const { Router } = require("express");
 const {
-  POST_create_tasks,
-  GET_tasks,
-  PUT_tasks,
-  DELETE_tasks,
-  GET_oneTask,
-  DELETE_oneTask
+  createTask,
+  getTask,
+  getAllTasks,
+  putTask,
+  deleteTask,
+  deleteAllTasks,  
 } = require("../controllers/tasks.controller.js");
 const router = Router();
 
-router.get("/:idTask", GET_oneTask);
-router.get("/", GET_tasks);
+router.get("/:idTask", getTask);
+router.get("/", getAllTasks);
 
 
-router.post("/", POST_create_tasks);
+router.post("/", createTask);
 
 
-router.put("/:idTask", PUT_tasks);
+router.put("/:idTask", putTask);
 
 
-router.delete("/", DELETE_tasks);
-router.delete("/:idTask", DELETE_oneTask);
+router.delete("/", deleteAllTasks);
+router.delete("/:idTask", deleteTask);
 
 
 module.exports = router;

@@ -5,7 +5,6 @@ const TasksSchema = new Schema({
     type: String,
     required: [true, 'El titulo es requerido.'],
     unique: true,
-    
   },
   description: {
     type: String,

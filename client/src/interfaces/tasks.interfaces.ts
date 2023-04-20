@@ -1,14 +1,37 @@
 
-export interface Task  {
-    taskId?: string;
+export interface ITask  {
+    _id: string | undefined;
     title: string;
     description: string;
     status: string;
     userId?: string;
 }
 
-export interface TasksState {
-    allTasks: Task[] | null;
-    task: Task | null;
+export interface ITasksState {
+    allTasks: ITask[] | null;
+    task: ITask | null;
 }
 
+export interface IStatusGetTask  {
+    status: string;
+    message: string;
+    info: ITask
+}
+
+export interface IStatusTask{
+    status: string;
+    message: string;
+    info: ITask | undefined | null;
+}
+//Error status interface
+export interface IStatusTaskError{
+    status: string;
+    errorMessage: string;
+    error: object;
+}
+
+export interface IStatusGetAllTask  {
+    status: string;
+    message: string;
+    info: ITask[]
+}
