@@ -19,7 +19,7 @@ const createTask = async (req, res) => {
       !description ||
       typeof description !== "string"
     )
-      throw new Error("Title and description are required and must be strings");
+      throw new Error("El titulo y las Descripcion son requeridos.");
 
     //Create new Task
     const newTask = await Tasks.create({
@@ -27,10 +27,10 @@ const createTask = async (req, res) => {
       description,
       status,
     });
-    const message = "The Task was successfully created";
-    res.status(createCode).send(HandleSuccessResponse(message, newTask));
+    const successMessage = "The Task was successfully created";
+    res.status(createCode).send(HandleSuccessResponse(successMessage, newTask));
   } catch (error) {
-    res.status(errorCode).json(HanldeErrorResponse(error.message, error));
+    return res.status(errorCode).json(HanldeErrorResponse(error.message, error));
   }
 };
 

@@ -11,6 +11,7 @@ import {
   Tab,
   Tabs,
   Box,
+  FormControl,
 } from "@mui/material";
 import { FormEvent, useState, useEffect } from "react";
 import { useAddTaskMutation } from "../../apis/tasksApi";
@@ -20,21 +21,11 @@ import { toast, Toaster } from "react-hot-toast";
 import { configToast } from "../../utils/toast.utils";
 
 const CreateCard = () => {
-  const [createtask, { isError, isLoading, isSuccess, data, error }] = useAddTaskMutation();
+  const [createTask, { isError, isLoading, isSuccess, data }] =
+    useAddTaskMutation();
   //le cambio el tipado a la vatiable error, para poder manejar la logica cuando devuelve un error el sevidor
-  const errorTask = error as IStatusTaskError;
-
-  const notifyError = (): string => toast(`${errorTask.errorMessage}`, configToast);
-  const notifySuccess = (): string => toast(`${data?.message}`, configToast)
-  useEffect(() => {
-    if (isError) {
-      notifyError();
-    }
-    else if (isSuccess) {
-       notifySuccess();
-    }
-  }, [isError, isSuccess]);
-
+  // const errorTask = error as IStatusTaskError;
+  
   const initialTask: ITask = {
     _id: undefined,
     description: "",
@@ -51,6 +42,7 @@ const CreateCard = () => {
     }));
   };
   const handleChangeInputs = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    //Escucha cada vez que los inputs cambian y va haciendo el set al estado local.
     const nameInput = target.name;
     const valueInput = target.value;
     setTask((initial) => ({
@@ -58,10 +50,30 @@ const CreateCard = () => {
       [nameInput]: valueInput,
     }));
   };
-  const onSubmitForm = async (e: FormEvent) => {
-    e.preventDefault();
-    await createtask(task).unwrap();
-    setTask(initialTask);
+  const onSubmitForm =  (event: FormEvent) => {
+    event.preventDefault();
+
+ //Se crea una alerta con la promesa del create Task
+    toast.promise(
+      //,unwrap() convierte la función a una promesa
+      createTask(task).unwrap(),
+      {
+        loading: 'Loading',
+        success: (data) => `${data.message}`,
+        error: (error) => `${error.errorMessage}`,
+      },//Configuracion de la alerta
+      configToast
+    ).then(() => {
+      //Seteo el estado al inicial una vez creada la task
+      setTask({
+        _id: undefined,
+        description: "",
+        title: "",
+        status: "to do",
+        userId: "",
+      });
+    })
+
   };
   return (
     <Grid container alignItems="center" justifyContent="center">
@@ -76,12 +88,13 @@ const CreateCard = () => {
             >
               {/* Title */}
               <TextField
-                error = {isError ? true : false}
+                error={isError ? true : false}
                 id="standard-basic"
                 label={"Titulo de Tarea"}
                 variant="standard"
                 name="title"
                 onChange={handleChangeInputs}
+                value={task.title}
               />
 
               {/* Status */}
@@ -96,7 +109,7 @@ const CreateCard = () => {
                   indicatorColor="primary"
                 >
                   <Tab value="to do" label="Por hacer" />
-                  <Tab value="in progress" label="en progreso" />
+                  <Tab value="in progress" label="En progreso" />
                   <Tab value="done" label="Hecha" />
                 </Tabs>
               </Box>
@@ -113,6 +126,7 @@ const CreateCard = () => {
                   mt: 2,
                 }}
                 onChange={handleChangeInputs}
+                value={task.description}
               />
             </CardContent>
 

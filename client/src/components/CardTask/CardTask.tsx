@@ -1,4 +1,4 @@
-import CardTaskProps from "./interface";
+import ICardTaskProps from "./interface";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -8,31 +8,15 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CardHeader from "@mui/material/CardHeader";
 import { Grid } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { Toaster, toast } from "react-hot-toast";
 import { useDeleteTaskMutation } from "../../apis/tasksApi";
 import { useEffect } from "react";
 import { configToast } from "../../utils/toast.utils";
-const CardTask = ({ info }: CardTaskProps) => {
+
+
+
+const CardTask = ({ info, alertAndDelete }: ICardTaskProps) => {
   const { description, status, title, userId, _id } = info;
   const navigate = useNavigate();
-  const notifyDelete = () => {
-     toast("Se elimino efectivamente...", configToast);
-  };
-  const notifyDeleteError = () => {
-    toast("No se pudo eliminar", configToast);
-  };
-  const [deleteTask, { isError, isLoading, isSuccess }] =
-    useDeleteTaskMutation();
-
-  useEffect(() => {
-    console.log(isSuccess, isError);
-    if (isSuccess) {
-      notifyDelete();
-    }else if(isError){
-      notifyDeleteError();
-    }
-  }, [isSuccess, isError]);
-
   return (
     <Card
       sx={{
@@ -53,14 +37,12 @@ const CardTask = ({ info }: CardTaskProps) => {
             m: 0.5,
             cursor: "pointer",
           }}
-          onClick={async () => {
-              await deleteTask(_id).unwrap();
+          onClick={()=> alertAndDelete(_id)}
+        >
 
-          }}
-        ></DeleteForeverIcon>
-        <Toaster></Toaster>
+        </DeleteForeverIcon>
       </CardActions>
-      <CardHeader title={title} sx={{}}></CardHeader>
+      <CardHeader title={title} ></CardHeader>
       <CardContent sx={{ p: 1 }}>
         <Typography
           variant="body2"
@@ -82,12 +64,13 @@ const CardTask = ({ info }: CardTaskProps) => {
           <Button size="medium" onClick={() => {}}>
             Estado
           </Button>
+          {/* Se navega al ID correspondiente para leer la descripcion de la tarea. */}
           <Button onClick={() => navigate(`/tasks/details/${_id}`)}>
             Descripcion completa
           </Button>
-          <Toaster />
         </CardActions>
       </Grid>
+
     </Card>
   );
 };

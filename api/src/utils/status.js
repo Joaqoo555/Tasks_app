@@ -5,14 +5,20 @@ const internalErrorCode =500;
 const notFoundCode = 404;
 const HandleSuccessResponse = (message = "Se realizo con exito", info = undefined) =>{
     return {
-        status: "success",
+        status: "Success",
         message,
         info
     }
 }
 const HanldeErrorResponse = (errorMessage, error)=> {
-    return {
-        status: "Error",
+    if(error.code === 11000 || error.code === 11001)
+        return {
+            status: error.status,
+            errorMessage: "Esta tarea ya esta creada en la base de datos.",
+            error
+        }
+    else return {
+        status: error.status,
         errorMessage,
         error
     }

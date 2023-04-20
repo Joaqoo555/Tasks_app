@@ -29,13 +29,15 @@ export const tasksApi = createApi({
       
     }),
     //Obtener tasks por ID
-    getTaskById: builder.query<IStatusGetTask, string>({
+    getTaskById: builder.query<IStatusGetTask, string | undefined>({
         query: (id) => `tasks/${id}`,
         transformErrorResponse: (errorResponse) => {
           const {data} = errorResponse;
           const dataErrors = data as IStatusTaskError;
           return dataErrors
-        } 
+        } ,
+      providesTags: ["Deletes", "Updates", "Posts"]
+
     }),
     //Primer parametro es lo que recibo de la respuesta del post, que debe poseer un userId, el segundo parametro es la interface que se le va a proporcionar al addtask
     addTask: builder.mutation<IStatusTask, ITask>({
@@ -45,6 +47,7 @@ export const tasksApi = createApi({
         body: newTask,
 
       }),
+      extraOptions: {maxRetries: 0},
       invalidatesTags: ["Posts"],
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
@@ -60,6 +63,7 @@ export const tasksApi = createApi({
         method: "delete"
       }),
       invalidatesTags: ["Deletes"],
+      extraOptions: {maxRetries: 0},
 
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
@@ -75,7 +79,8 @@ export const tasksApi = createApi({
         body: taskUpdate,
       }),
       invalidatesTags: ["Updates"],
-
+      extraOptions: {maxRetries: 0},
+      
       transformErrorResponse: (errorResponse) => {
         const {data} = errorResponse;
         const dataErrors = data as IStatusTaskError;

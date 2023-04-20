@@ -61,7 +61,7 @@ function App() {
             <Route index element={<Home />}></Route>
             <Route path="/tasks/create" element={<FormTask />}></Route>
             <Route
-              path="/tasks/details/:taskId"
+              path="/tasks/details/:_id"
               element={<DetailTask />}
             ></Route>
           </Route>

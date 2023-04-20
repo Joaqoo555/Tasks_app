@@ -2,5 +2,6 @@ import { ToastOptions } from "react-hot-toast";
 
 export const configToast: ToastOptions = {
   position: "bottom-right",
-  duration: 2000
+  duration: 1000,
+
 };
