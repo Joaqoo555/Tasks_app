@@ -7,16 +7,17 @@ const {
   deleteTask,
   deleteAllTasks,  
 } = require("../controllers/tasks.controller.js");
+const { validateTasks } = require("../utils/conditionalTasks.js");
 const router = Router();
 
-router.get("/:idTask", getTask);
-router.get("/", getAllTasks);
+router.get("/:idTask",  validateTasks, getTask);
+router.get("/", validateTasks, getAllTasks);
 
 
-router.post("/", createTask);
+router.post("/", validateTasks, createTask);
 
 
-router.put("/:idTask", putTask);
+router.put("/:idTask", validateTasks,putTask);
 
 
 router.delete("/", deleteAllTasks);

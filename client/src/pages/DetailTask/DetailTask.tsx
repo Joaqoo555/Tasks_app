@@ -8,9 +8,9 @@ const DetailTask = () => {
   console.log(data?.info);
   return (
     <Container >
-    <h1>{data?.info?.title}</h1>
-    <p>{data?.info?.description}</p>
-    <p>{data?.info?.status}</p>
+      <h1>{data?.info?.title}</h1>
+        <p>{data?.info?.description}</p>
+      <p>{data?.info?.status}</p>
   </Container>
   )
 
